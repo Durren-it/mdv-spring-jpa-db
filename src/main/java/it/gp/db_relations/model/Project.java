@@ -1,5 +1,6 @@
 package it.gp.db_relations.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -21,5 +22,6 @@ public class Project {
     private String name;
 
     @ManyToMany(mappedBy = "projects")
+    @JsonBackReference("user-projects")
     private List<User> users;
 }

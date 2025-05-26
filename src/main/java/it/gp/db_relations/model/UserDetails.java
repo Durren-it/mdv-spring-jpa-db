@@ -1,5 +1,6 @@
 package it.gp.db_relations.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -20,5 +21,6 @@ public class UserDetails {
 
     @OneToOne
     @JoinColumn(name = "user_id")
+    @JsonBackReference("user-userdetails")
     private User user;
 }
