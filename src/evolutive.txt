@@ -1,0 +1,3 @@
+1) Creazione Model/DTO per ogni oggetto ritornato dell'API
+2) Creazione strato di Service (interfaccia/implementazione)
+3) Creazione handler eccezioni e risposte HTTP
