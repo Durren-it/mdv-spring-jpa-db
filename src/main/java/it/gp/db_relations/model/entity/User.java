@@ -1,6 +1,5 @@
-package it.gp.db_relations.model;
+package it.gp.db_relations.model.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

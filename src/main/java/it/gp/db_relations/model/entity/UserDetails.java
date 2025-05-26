@@ -1,4 +1,4 @@
-package it.gp.db_relations.model;
+package it.gp.db_relations.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
@@ -6,22 +6,21 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Entity
-@Table(name = "projects")
+@Table(name = "user_details")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Project {
+public class UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "project_id")
     private Long id;
-    private String name;
+    private String address;
+    private String phoneNumber;
 
-    @ManyToMany(mappedBy = "projects")
-    @JsonBackReference("user-projects")
-    private List<User> users;
+    @OneToOne
+    @JoinColumn(name = "user_id")
+    @JsonBackReference("user-userdetails")
+    private User user;
 }

@@ -1,6 +1,6 @@
 package it.gp.db_relations.controller;
 
-import it.gp.db_relations.model.Post;
+import it.gp.db_relations.model.entity.Post;
 import it.gp.db_relations.repository.PostRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

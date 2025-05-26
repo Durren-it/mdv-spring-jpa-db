@@ -5,7 +5,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import it.gp.db_relations.model.User;
+import it.gp.db_relations.model.entity.User;
 import it.gp.db_relations.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -1,4 +1,4 @@
-package it.gp.db_relations.model;
+package it.gp.db_relations.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
