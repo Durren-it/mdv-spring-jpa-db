@@ -1,7 +1,9 @@
 package it.gp.db_relations.controller;
 
+import it.gp.db_relations.model.dto.PostDTO;
 import it.gp.db_relations.model.entity.Post;
 import it.gp.db_relations.repository.PostRepository;
+import it.gp.db_relations.service.IPostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,24 +14,28 @@ import java.util.List;
 @RequestMapping("/posts")
 public class PostController {
 
-    @Autowired
-    private PostRepository postRepository;
+    private final IPostService postService;
+
+    public PostController(IPostService postService) {
+        this.postService = postService;
+    }
 
     @GetMapping
-    public List<Post> getAllPosts() {
-        return postRepository.findAll();
+    public List<PostDTO> getAllPosts() {
+        return postService.getAllPosts();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Post> getPostById(@PathVariable Long id) {
-        Post post = postRepository.findById(id).orElse(null);
-        if (post == null)
+    public ResponseEntity<PostDTO> getPostById(@PathVariable Long id) {
+        PostDTO post = postService.getPostById(id);
+        if (post == null) {
             return ResponseEntity.notFound().build();
+        }
         return ResponseEntity.ok(post);
     }
 
     @PostMapping
-    public Post createPost(@RequestBody Post post) {
-        return postRepository.save(post);
+    public PostDTO createPost(@RequestBody PostDTO postDTO) {
+        return postService.createPost(postDTO);
     }
 }

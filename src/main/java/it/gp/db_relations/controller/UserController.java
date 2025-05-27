@@ -5,8 +5,10 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import it.gp.db_relations.model.dto.UserDTO;
 import it.gp.db_relations.model.entity.User;
 import it.gp.db_relations.repository.UserRepository;
+import it.gp.db_relations.service.IUserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,19 +22,20 @@ import java.util.List;
 @Tag(name = "Gestione Utenti", description = "Api di gestione utenti")
 public class UserController {
 
-    @Autowired
-    private UserRepository userRepository;
-
+    private final IUserService userService;
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
+
+    public UserController(IUserService userService) {
+        this.userService = userService;
+    }
 
     @GetMapping
     @Operation(summary = "Recupera utenti", description = "Torna la lista di tutti gli utenti sul database")
     @ApiResponse(responseCode = "200", description = "Utenti recuperati con successo")
-    public List<User> getAllUsers() {
-        // LOG DELLA CHIAMATA EFFETTUATA
+    public List<UserDTO> getAllUsers() {
         logger.debug("Una stringa di DEBUG");
-        logger.info("chiamata effettutata al metodo getAllUsers()");
-        return userRepository.findAll();
+        logger.info("Chiamata effettuata al metodo getAllUsers()");
+        return userService.getAllUsers();
     }
 
     @GetMapping("/{id}")
@@ -41,20 +44,19 @@ public class UserController {
             @ApiResponse(responseCode = "200", description = "Utente trovato"),
             @ApiResponse(responseCode = "404", description = "Utente non trovato con l'id specificato")
     })
-    public ResponseEntity<User> getUserById(
+    public ResponseEntity<UserDTO> getUserById(
             @Parameter(name = "id", required = true, description = "Identificativo dell'utente, corrisponde alla primary key del database")
-            @PathVariable Long id
-    ) {
-        User user = userRepository.findById(id).orElse(null);
+            @PathVariable Long id) {
+        UserDTO user = userService.getUserById(id);
         if (user == null) {
-            logger.error("Utente non trovato con id:" + id);
+            logger.error("Utente non trovato con id: " + id);
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(user);
     }
 
     @PostMapping
-    public User createUser(@RequestBody User user) {
-        return userRepository.save(user);
+    public UserDTO createUser(@RequestBody UserDTO userDTO) {
+        return userService.createUser(userDTO);
     }
 }

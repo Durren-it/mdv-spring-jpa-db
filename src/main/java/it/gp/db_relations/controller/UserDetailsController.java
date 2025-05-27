@@ -1,7 +1,9 @@
 package it.gp.db_relations.controller;
 
+import it.gp.db_relations.model.dto.UserDetailsDTO;
 import it.gp.db_relations.model.entity.UserDetails;
 import it.gp.db_relations.repository.UserDetailsRepository;
+import it.gp.db_relations.service.IUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,24 +14,28 @@ import java.util.List;
 @RequestMapping("/details")
 public class UserDetailsController {
 
-    @Autowired
-    private UserDetailsRepository userDetailsRepository;
+    private final IUserDetailsService userDetailsService;
+
+    public UserDetailsController(IUserDetailsService userDetailsService) {
+        this.userDetailsService = userDetailsService;
+    }
 
     @GetMapping
-    public List<UserDetails> getAllUserDetails() {
-        return userDetailsRepository.findAll();
+    public List<UserDetailsDTO> getAllUserDetails() {
+        return userDetailsService.getAllUserDetails();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<UserDetails> getDetailsById(@PathVariable Long id) {
-        UserDetails userDetails = userDetailsRepository.findById(id).orElse(null);
-        if (userDetails == null)
+    public ResponseEntity<UserDetailsDTO> getDetailsById(@PathVariable Long id) {
+        UserDetailsDTO details = userDetailsService.getUserDetailsById(id);
+        if (details == null) {
             return ResponseEntity.notFound().build();
-        return ResponseEntity.ok(userDetails);
+        }
+        return ResponseEntity.ok(details);
     }
 
     @PostMapping
-    public UserDetails createUserDetails(@RequestBody UserDetails userDetails) {
-        return userDetailsRepository.save(userDetails);
+    public UserDetailsDTO createUserDetails(@RequestBody UserDetailsDTO userDetailsDTO) {
+        return userDetailsService.createUserDetails(userDetailsDTO);
     }
 }
