@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class UserDetailsServiceImpl implements IUserDetailsService {
@@ -37,18 +38,21 @@ public class UserDetailsServiceImpl implements IUserDetailsService {
     }
 
     @Override
-    public List<UserDetails> getAllUserDetails() {
-        return userDetailsRepository.findAll();
+    public List<UserDetailsDTO> getAllUserDetails() {
+        return userDetailsRepository.findAll().stream()
+                .map(this::toDTO).collect(Collectors.toList());
     }
 
     @Override
-    public UserDetails getUserDetailsById(Long id) {
+    public UserDetailsDTO getUserDetailsById(Long id) {
         Optional<UserDetails> optionalUserDetails = userDetailsRepository.findById(id);
-        return optionalUserDetails.orElse(null);
+        return optionalUserDetails.map(this::toDTO).orElse(null);
     }
 
     @Override
-    public UserDetails createUserDetails(UserDetails userDetails) {
-        return userDetailsRepository.save(userDetails);
+    public UserDetailsDTO createUserDetails(UserDetailsDTO userDetailsDTO) {
+        return toDTO(userDetailsRepository.save(
+                toEntity(userDetailsDTO)
+        ));
     }
 }

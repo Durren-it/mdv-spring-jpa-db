@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class PostServiceImpl implements IPostService {
@@ -37,18 +38,21 @@ public class PostServiceImpl implements IPostService {
     }
 
     @Override
-    public List<Post> getAllPosts() {
-        return postRepository.findAll();
+    public List<PostDTO> getAllPosts() {
+        return postRepository.findAll().stream()
+                .map(this::toDTO).collect(Collectors.toList());
     }
 
     @Override
-    public Post getPostById(Long id) {
+    public PostDTO getPostById(Long id) {
         Optional<Post> optionalPost = postRepository.findById(id);
-        return optionalPost.orElse(null);
+        return optionalPost.map(this::toDTO).orElseThrow();
     }
 
     @Override
-    public Post createPost(Post post) {
-        return postRepository.save(post);
+    public PostDTO createPost(PostDTO postDTO) {
+        return toDTO(postRepository.save(
+                toEntity(postDTO)
+        ));
     }
 }

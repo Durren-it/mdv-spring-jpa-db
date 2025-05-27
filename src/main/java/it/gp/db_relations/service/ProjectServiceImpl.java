@@ -37,18 +37,21 @@ public class ProjectServiceImpl implements IProjectService {
     }
 
     @Override
-    public List<Project> getAllProjects() {
-        return projectRepository.findAll();
+    public List<ProjectDTO> getAllProjects() {
+        return projectRepository.findAll().stream()
+                .map(this::toDTO).collect(Collectors.toList());
     }
 
     @Override
-    public Project getProjectById(Long id) {
+    public ProjectDTO getProjectById(Long id) {
         Optional<Project> optionalProject = projectRepository.findById(id);
-        return optionalProject.orElse(null);
+        return optionalProject.map(this::toDTO).orElse(null);
     }
 
     @Override
-    public Project createProject(Project project) {
-        return projectRepository.save(project);
+    public ProjectDTO createProject(ProjectDTO projectDTO) {
+        return toDTO(projectRepository.save(
+                toEntity(projectDTO)
+        ));
     }
 }
