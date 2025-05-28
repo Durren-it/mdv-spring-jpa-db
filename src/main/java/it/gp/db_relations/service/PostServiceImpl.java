@@ -20,6 +20,7 @@ public class PostServiceImpl implements IPostService {
         this.postRepository = postRepository;
     }
 
+    // TODO: FIX MAPPING PER DATI MANCANTI
     private PostDTO toDTO(Post post) {
         return new PostDTO(
                 post.getId(),

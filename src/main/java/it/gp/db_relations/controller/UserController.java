@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import it.gp.db_relations.exception.ResourceNotFoundException;
 import it.gp.db_relations.model.dto.UserDTO;
 import it.gp.db_relations.model.entity.User;
 import it.gp.db_relations.repository.UserRepository;
@@ -50,7 +51,8 @@ public class UserController {
         UserDTO user = userService.getUserById(id);
         if (user == null) {
             logger.error("Utente non trovato con id: " + id);
-            return ResponseEntity.notFound().build();
+            // TODO SCRIVERE I VARI THROW NEI CONTROLLER / SERVICE
+            throw new ResourceNotFoundException("User with id " + id + " not found.");
         }
         return ResponseEntity.ok(user);
     }
